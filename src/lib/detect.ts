@@ -74,9 +74,9 @@ export function analyzeUrl(input: string): Result {
     if (isOfficial) break;
     if (k.length < 4 && !labels.includes(k)) continue;
     if (flat.includes(k)) {
-      const official = BRANDS[brand].some((d) => host === d || host.endsWith("." + d));
+      const official = (BRANDS[brand] ?? []).some((d) => host === d || host.endsWith("." + d));
       if (!official) {
-        signals.push({ label: `Possible ${brand} impersonation`, detail: `Mentions "${brand}" but is not on its official domain (${BRANDS[brand].join(", ")}).`, weight: 4 });
+        signals.push({ label: `Possible ${brand} impersonation`, detail: `Mentions "${brand}" but is not on its official domain (${(BRANDS[brand] ?? []).join(", ")}).`, weight: 4 });
         break;
       }
     }
@@ -140,7 +140,7 @@ export function analyzePhone(input: string) {
     valid = true; type = "International";
     const cc: Record<string, string> = { "+1": "USA/Canada", "+44": "United Kingdom", "+91": "India", "+92": "Pakistan", "+966": "Saudi Arabia", "+974": "Qatar", "+968": "Oman", "+965": "Kuwait", "+973": "Bahrain", "+20": "Egypt", "+63": "Philippines", "+234": "Nigeria", "+62": "Indonesia", "+880": "Bangladesh" };
     const hit = Object.keys(cc).sort((a, b) => b.length - a.length).find((k) => n.startsWith(k));
-    country = hit ? cc[hit] : "International";
+    country = (hit && cc[hit]) || "International";
   }
   if (!valid) signals.push({ label: "Invalid number format", detail: "This does not match a valid UAE or E.164 international format.", weight: 3 });
   if (valid && type === "International") signals.push({ label: "Foreign number", detail: "Messages claiming to be from UAE banks, police or couriers will not come from foreign numbers.", weight: 1.5 });
