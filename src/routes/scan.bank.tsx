@@ -26,7 +26,7 @@ function Page() {
         <button onClick={() => iban.trim() && run()} className={btnCls + " w-fit"} disabled={!iban.trim()}>{t("analyze")}</button>
       </div>
       <Samples items={[{ label: "Valid UAE IBAN + urgent request", value: "AE070331234567890123456|URGENT: our company account changed. Transfer AED 18,000 to the new account immediately, keep this confidential." }, { label: "Mistyped IBAN", value: "AE080331234567890123456|" }]}
-        onPick={(x) => { const [a, b] = x.split("|"); setIban(a); setReq(b); run(a, b); }} />
+        onPick={(x) => { const [a = "", b = ""] = x.split("|"); setIban(a); setReq(b); run(a, b); }} />
       {res && (
         <div className="glass p-6 mt-6">
           <div className="font-mono text-lg" dir="ltr">{res.v.masked}</div>

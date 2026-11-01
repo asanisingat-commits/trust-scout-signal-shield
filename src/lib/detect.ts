@@ -69,7 +69,9 @@ export function analyzeUrl(input: string): Result {
   const kw = (u.pathname + u.search + host).toLowerCase().match(/login|signin|verify|update|secure|account|confirm|wallet|unlock|suspend|otp|kyc|payment|refund|reward|prize/g);
   if (kw) signals.push({ label: "Sensitive action keywords", detail: `Contains: ${[...new Set(kw)].join(", ")}.`, weight: Math.min(2, kw.length * 0.7) });
   const flat = host.replace(/[^a-z0-9]/g, "").replace(/0/g, "o").replace(/1/g, "l");
+  const isOfficial = Object.values(BRANDS).flat().some((d) => host === d || host.endsWith("." + d));
   for (const [k, brand] of Object.entries(BRAND_KEYS)) {
+    if (isOfficial) break;
     if (k.length < 4 && !labels.includes(k)) continue;
     if (flat.includes(k)) {
       const official = BRANDS[brand].some((d) => host === d || host.endsWith("." + d));
