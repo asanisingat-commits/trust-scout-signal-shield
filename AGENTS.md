@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Scam detection rules live in src/lib/detect.ts as pure, tested functions (detect.test.ts); every score point must come from a named rule so results stay explainable.
