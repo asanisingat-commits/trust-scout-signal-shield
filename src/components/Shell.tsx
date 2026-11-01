@@ -47,7 +47,7 @@ export function Shell({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t mt-16 py-8 text-center text-sm text-muted-foreground">
-        <div className="flex justify-center items-center gap-2 mb-2"><Logo size={20} /> Trust Shield · UAE Hackathon, Sharjah</div>
+        <div className="flex justify-center items-center gap-2 mb-2"><Logo size={20} /> Trust Shield</div>
 
       </footer>
     </div>
