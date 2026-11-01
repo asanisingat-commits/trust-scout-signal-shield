@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as MediaRouteImport } from './routes/media'
+import { Route as ScanBankRouteImport } from './routes/scan.bank'
+import { Route as ScanMessageRouteImport } from './routes/scan.message'
+import { Route as ScanPhoneRouteImport } from './routes/scan.phone'
+import { Route as ScanUrlRouteImport } from './routes/scan.url'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanBankRoute = ScanBankRouteImport.update({
+  id: '/scan/bank',
+  path: '/scan/bank',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanMessageRoute = ScanMessageRouteImport.update({
+  id: '/scan/message',
+  path: '/scan/message',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanPhoneRoute = ScanPhoneRouteImport.update({
+  id: '/scan/phone',
+  path: '/scan/phone',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScanUrlRoute = ScanUrlRouteImport.update({
+  id: '/scan/url',
+  path: '/scan/url',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/learn': typeof LearnRoute
+  '/media': typeof MediaRoute
+  '/scan/bank': typeof ScanBankRoute
+  '/scan/message': typeof ScanMessageRoute
+  '/scan/phone': typeof ScanPhoneRoute
+  '/scan/url': typeof ScanUrlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/learn': typeof LearnRoute
+  '/media': typeof MediaRoute
+  '/scan/bank': typeof ScanBankRoute
+  '/scan/message': typeof ScanMessageRoute
+  '/scan/phone': typeof ScanPhoneRoute
+  '/scan/url': typeof ScanUrlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/learn': typeof LearnRoute
+  '/media': typeof MediaRoute
+  '/scan/bank': typeof ScanBankRoute
+  '/scan/message': typeof ScanMessageRoute
+  '/scan/phone': typeof ScanPhoneRoute
+  '/scan/url': typeof ScanUrlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/learn'
+    | '/media'
+    | '/scan/bank'
+    | '/scan/message'
+    | '/scan/phone'
+    | '/scan/url'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/learn'
+    | '/media'
+    | '/scan/bank'
+    | '/scan/message'
+    | '/scan/phone'
+    | '/scan/url'
+  id:
+    | '__root__'
+    | '/'
+    | '/learn'
+    | '/media'
+    | '/scan/bank'
+    | '/scan/message'
+    | '/scan/phone'
+    | '/scan/url'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LearnRoute: typeof LearnRoute
+  MediaRoute: typeof MediaRoute
+  ScanBankRoute: typeof ScanBankRoute
+  ScanMessageRoute: typeof ScanMessageRoute
+  ScanPhoneRoute: typeof ScanPhoneRoute
+  ScanUrlRoute: typeof ScanUrlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan/bank': {
+      id: '/scan/bank'
+      path: '/scan/bank'
+      fullPath: '/scan/bank'
+      preLoaderRoute: typeof ScanBankRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan/message': {
+      id: '/scan/message'
+      path: '/scan/message'
+      fullPath: '/scan/message'
+      preLoaderRoute: typeof ScanMessageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan/phone': {
+      id: '/scan/phone'
+      path: '/scan/phone'
+      fullPath: '/scan/phone'
+      preLoaderRoute: typeof ScanPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scan/url': {
+      id: '/scan/url'
+      path: '/scan/url'
+      fullPath: '/scan/url'
+      preLoaderRoute: typeof ScanUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LearnRoute: LearnRoute,
+  MediaRoute: MediaRoute,
+  ScanBankRoute: ScanBankRoute,
+  ScanMessageRoute: ScanMessageRoute,
+  ScanPhoneRoute: ScanPhoneRoute,
+  ScanUrlRoute: ScanUrlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
