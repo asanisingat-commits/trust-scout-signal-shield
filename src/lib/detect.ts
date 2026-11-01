@@ -1,7 +1,7 @@
 // Rule-based, transparent detection logic. No random scores; every point comes from a named rule.
 export type Signal = { label: string; detail: string; weight: number };
 export type Result = {
-  score: number; // 0-10
+  score: number; // 1-10 (1 = no warning signs found)
   level: "low" | "medium" | "high";
   confidence: "low" | "moderate" | "strong";
   signals: Signal[];
@@ -12,7 +12,7 @@ export type Result = {
 
 export function finalize(signals: Signal[], recs: string[], notes: string[] = [], minSignalsForConfidence = 2): Result {
   const raw = signals.reduce((s, x) => s + x.weight, 0);
-  const score = Math.max(0, Math.min(10, Math.round(raw * 10) / 10));
+  const score = Math.max(1, Math.min(10, Math.round((1 + raw) * 10) / 10));
   const level = score >= 7 ? "high" : score >= 4 ? "medium" : "low";
   const strong = signals.filter((s) => s.weight >= 2).length;
   const confidence = strong >= minSignalsForConfidence ? "strong" : signals.length >= 2 ? "moderate" : "low";
