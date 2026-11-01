@@ -86,8 +86,8 @@ export function analyzeUrl(input: string): Result {
   return finalize(signals, [
     "Type the official website address yourself instead of clicking links.",
     "Never enter card details, OTPs or UAE Pass credentials after following a link from a message.",
-    "Report phishing to the eCrime portal of Dubai Police (ecrime.ae) or call 901.",
   ], notes);
+
 }
 
 const MSG_RULES: { re: RegExp; label: string; detail: string; weight: number }[] = [
@@ -118,8 +118,8 @@ export function analyzeMessage(text: string): Result {
   return finalize(signals, [
     "Do not reply, click links, or send money until you verify the sender through an official number or app.",
     "Never share OTPs, card PINs or UAE Pass details with anyone.",
-    "Report scam messages via Dubai Police eCrime (ecrime.ae), the Aman service (8002626), or your bank.",
     "Block the sender and report it inside the app (WhatsApp, Instagram, etc.).",
+
   ], ["Language-pattern analysis only. Scammers change wording often; a low score does not mean the message is genuine."]);
 }
 
