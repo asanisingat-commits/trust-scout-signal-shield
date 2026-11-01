@@ -31,7 +31,10 @@ function Page() {
       <h2 className="text-2xl font-bold mt-10">Golden rules</h2>
       <ul className="mt-4 grid gap-2">{TIPS.map((x) => <li key={x} className="flex gap-3 items-start"><span className="text-primary">✓</span>{x}</li>)}</ul>
       <div className="mt-10 grid sm:grid-cols-3 gap-4 text-sm">
-        {[["Emergency", "999"], ["Sharjah Police Najeed non -emergency Reporting\n                    991", "\n"]].map(([a, b]) => <div key={a} className="rounded-xl border-s-4 border-uae-red bg-card/50 p-4"><div className="text-muted-foreground">{a}</div><div className="text-lg font-semibold" dir="ltr">{b}</div></div>)}
+        {[["Emergency", "999"], ["Sharjah Police Najeed non -emergency Reporting\n                    991", "\n"]].map(([a, b]) => {
+          const m = a.match(/^(.*?)(\s*)(\d+)$/s);
+          return <div key={a} className="rounded-xl border-s-4 border-uae-red bg-card/50 p-4"><div className="text-muted-foreground">{m ? <>{m[1]}{m[2]}<span className="font-bold text-foreground">{m[3]}</span></> : a}</div><div className="text-lg font-bold" dir="ltr">{b}</div></div>;
+        })}
       </div>
     </div>
   );
