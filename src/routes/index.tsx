@@ -15,11 +15,12 @@ export const Route = createFileRoute("/")({
 });
 
 const MODULES = [
+  { to: "/check", icon: "🧩", k: "check", d: "Voice note or image + message + link + IBAN, checked together. One answer before you pay.", live: true },
   { to: "/scan/url", icon: "🔗", k: "url", d: "Phishing patterns, look-alike domains, brand impersonation.", live: true },
   { to: "/scan/message", icon: "💬", k: "message", d: "WhatsApp, SMS, email & social messages.", live: true },
   { to: "/scan/phone", icon: "📞", k: "phone", d: "UAE +971 & international number validation.", live: true },
   { to: "/scan/bank", icon: "🏦", k: "bank", d: "UAE IBAN checksum + payment-request analysis.", live: true },
-  { to: "/media", icon: "🖼️", k: "media", d: "Photo, video & news claim verification.", live: false },
+  { to: "/media", icon: "🖼️", k: "media", d: "Voice note and image deepfake checks. Video: roadmap.", live: true },
   { to: "/learn", icon: "🛡️", k: "learn", d: "UAE scam awareness and safety tips.", live: true },
 ] as const;
 
@@ -35,10 +36,11 @@ function Index() {
           <h1 className="mt-4 text-4xl md:text-6xl font-bold leading-tight">{t("heroTitle")}</h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">{t("heroSub")}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/scan/message" className="rounded-lg bg-primary text-primary-foreground font-semibold px-6 py-3 glow hover:brightness-110">{t("startScan")}</Link>
+            <Link to="/check" className="rounded-lg bg-primary text-primary-foreground font-semibold px-6 py-3 glow hover:brightness-110">{t("checkAll")}</Link>
+            <Link to="/scan/message" className="rounded-lg border px-6 py-3 hover:border-primary">{t("startScan")}</Link>
             <Link to="/scan/url" className="rounded-lg border px-6 py-3 hover:border-primary">{t("scanUrl")}</Link>
           </div>
-          <p className="mt-6 text-xs text-muted-foreground">🔒 {t("privacy")}</p>
+          <p className="mt-6 text-xs text-muted-foreground max-w-xl mx-auto">🔒 {t("privacyMedia")}</p>
         </div>
       </section>
       <section className="mx-auto max-w-6xl px-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -52,9 +54,28 @@ function Index() {
         ))}
       </section>
       <section className="mx-auto max-w-6xl px-4 mt-12 grid md:grid-cols-3 gap-4 text-sm">
-        {[["Transparent", "Every point in a risk score comes from a named, explained rule — no black box, no random numbers."], ["Private", "Scans run in your browser. Nothing you paste is stored or sent anywhere."], ["Honest", "We never say something is safe just because we found nothing. Inconclusive means inconclusive."]].map(([h, p]) => (
+        {[["Transparent", "Every point in a risk score comes from a named, explained rule — no black box, no random numbers."], ["Private", "Text checks run in your browser. Media files are sent only to an AI detection model for analysis and are not stored."], ["Honest", "We never say something is safe just because we found nothing. Inconclusive means inconclusive."]].map(([h, p]) => (
           <div key={h} className="rounded-xl border-s-4 border-primary bg-card/50 p-5"><div className="font-semibold">{h}</div><p className="text-muted-foreground mt-1">{p}</p></div>
         ))}
+      </section>
+      <section className="mx-auto max-w-6xl px-4 mt-12">
+        <h2 className="text-2xl font-bold">We complement existing tools, we don’t compete</h2>
+        <div className="mt-4 grid md:grid-cols-3 gap-4 text-sm">
+          {[["Expert detection", "SARAAB (Dubai Electronic Security Center) and Deepy — powerful models for professionals.", false],
+            ["Government awareness", "TDRA Digital FraudHunter and the UAE Cyber Security Council — warnings and screenshot checks.", false],
+            ["Trust Shield", "For residents — one tap, one answer, in their language, before they pay.", true]].map(([h, p, me]) => (
+            <div key={String(h)} className={`glass p-5 ${me ? "border-primary border-2" : ""}`}><div className={`font-semibold ${me ? "text-primary" : ""}`}>{h}</div><p className="text-muted-foreground mt-1">{p}</p></div>
+          ))}
+        </div>
+        <div className="mt-4 rounded-xl bg-card/50 border p-5 text-sm">
+          <div className="font-semibold">Roadmap</div>
+          <ul className="mt-2 grid gap-1 list-disc ps-5 text-muted-foreground">
+            <li>Video deepfake checks, designed to plug into SARAAB when it is released</li>
+            <li>WhatsApp bot: forward a voice note and get an answer</li>
+            <li>Bank app integration (API) at the moment of transfer</li>
+            <li>Alerts for organisations being impersonated</li>
+          </ul>
+        </div>
       </section>
     </>
   );
