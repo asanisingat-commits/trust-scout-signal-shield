@@ -1,5 +1,6 @@
 import type { Result } from "@/lib/detect";
 import { useLang } from "@/lib/i18n";
+import { WhatToDo } from "@/components/WhatToDo";
 
 export function scoreColor(score: number) {
   // 0 green -> 10 red, continuous hue
@@ -8,8 +9,9 @@ export function scoreColor(score: number) {
 }
 
 export function ResultCard({ r, extra }: { r: Result; extra?: React.ReactNode }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const c = scoreColor(r.score);
+  const conf = lang === "ar" ? ({ low: "ضعيفة", moderate: "متوسطة", strong: "قوية" } as const)[r.confidence] : r.confidence;
   return (
     <div className="glass p-6 mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-wrap items-center gap-6">
@@ -21,7 +23,7 @@ export function ResultCard({ r, extra }: { r: Result; extra?: React.ReactNode })
         <div className="flex-1 min-w-48">
           <div className="text-sm text-muted-foreground">{t("risk")}</div>
           <div className="text-2xl font-bold font-display" style={{ color: c }}>{t(r.level)}</div>
-          <div className="mt-2 text-sm">{t("confidence")}: <span className="font-semibold capitalize">{r.confidence}</span>
+          <div className="mt-2 text-sm">{t("confidence")}: <span className="font-semibold capitalize">{conf}</span>
             <div className="flex gap-1 mt-1">{[0, 1, 2].map((i) => <div key={i} className={`h-1.5 w-10 rounded ${i <= ["low", "moderate", "strong"].indexOf(r.confidence) ? "bg-primary" : "bg-muted"}`} />)}</div>
           </div>
         </div>
@@ -43,6 +45,7 @@ export function ResultCard({ r, extra }: { r: Result; extra?: React.ReactNode })
       )}
       <h3 className="mt-6 font-semibold">{t("recs")}</h3>
       <ul className="mt-2 grid gap-1 text-sm list-disc ps-5">{r.recommendations.map((x) => <li key={x}>{x}</li>)}</ul>
+      <WhatToDo r={r} />
       {r.notes.map((n) => <p key={n} className="mt-4 text-xs text-muted-foreground border-t pt-3">ℹ {n}</p>)}
     </div>
   );

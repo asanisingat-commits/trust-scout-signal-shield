@@ -12,8 +12,8 @@ export function Logo({ size = 36 }: { size?: number }) {
 }
 
 const NAV: { to: string; k: Key }[] = [
-  { to: "/", k: "home" }, { to: "/scan/url", k: "url" }, { to: "/scan/message", k: "message" }, { to: "/scan/phone", k: "phone" },
-  { to: "/scan/bank", k: "bank" }, { to: "/media", k: "media" }, { to: "/learn", k: "learn" },
+  { to: "/", k: "home" }, { to: "/check", k: "check" }, { to: "/scan/url", k: "url" }, { to: "/scan/message", k: "message" }, { to: "/scan/phone", k: "phone" },
+  { to: "/scan/bank", k: "bank" }, { to: "/media", k: "media" }, { to: "/learn", k: "learn" }, { to: "/results", k: "results" },
 ];
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -48,6 +48,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <main className="flex-1">{children}</main>
       <footer className="border-t mt-16 py-8 text-center text-sm text-muted-foreground">
         <div className="flex justify-center items-center gap-2 mb-2"><Logo size={20} /> Trust Shield</div>
+        <div className="text-xs">Built for UAE Hackathon 2026 · Challenge 40: Building Trust in Digital Content</div>
 
       </footer>
     </div>
