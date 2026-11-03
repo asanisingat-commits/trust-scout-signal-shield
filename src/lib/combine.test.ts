@@ -49,3 +49,27 @@ describe("what we checked", () => {
     expect(a.score).toBe(b.score);
   });
 });
+
+import { extractParts } from "./extract";
+describe("demo test messages", () => {
+  const run = (text: string, mediaKind: "none" | "voice" = "none") => {
+    const x = extractParts(text);
+    return analyzeCombined({ text, link: x.links[0] ?? "", phone: x.phones[0] ?? "", iban: x.ibans[0] ?? "", mediaKind });
+  };
+  const SCAMS = [
+    "Aramex: Your parcel is held at our facility due to an unpaid customs fee of AED 12.50. Pay within 24 hours or it will be returned: https://aramex-uae-pay.xyz/track",
+    "Dear customer, your Emirates NBD account has been suspended due to unusual activity. Verify your details now to avoid permanent block: http://enbd-secure-verify.top/login",
+    "Dubai Police: You have an unpaid traffic fine of AED 3,000. Pay immediately or your Emirates ID will be blocked. Pay here: dubaipolice-fines.info",
+    "CONGRATULATIONS! You have WON AED 50,000 in the Etisalat anniversary draw. To claim, share the OTP code sent to your phone within 1 hour.",
+    "Hi! We are hiring part-time. Earn AED 800 daily by liking videos. Simple tasks from home. Small deposit required to start. Contact us on WhatsApp +92 300 1234567",
+    "Guaranteed 30% monthly profit with our crypto trading program. Limited slots, invest today, pay in USDT.",
+    "عميلنا العزيز، تم إيقاف حسابك البنكي. يرجى تحديث بياناتك فوراً عبر الرابط: http://bank-update-uae.xyz لتجنب إغلاق الحساب.",
+  ];
+  it.each(SCAMS)("scam is high risk: %s", (m) => expect(run(m).level).toBe("high"));
+  it("son voice-note scam is high risk", () => expect(run("Mum it's me, I had an accident and my phone broke, this is my new number +44 7700 900123. Please send AED 4,000 now to AE07 0331 2345 6789 0123 456, it's urgent. Don't tell dad.", "voice").level).toBe("high"));
+  it.each([
+    "Your card ending 4421 was used for AED 85.00 at a supermarket on 03/11. If this wasn't you, call the number on the back of your card.",
+    "Hey, are we still meeting at 7 for dinner tonight? I booked a table.",
+    "مرحبا، هل ما زلنا نلتقي الساعة السابعة للعشاء الليلة؟",
+  ])("normal message stays low: %s", (m) => expect(run(m).level).toBe("low"));
+});
