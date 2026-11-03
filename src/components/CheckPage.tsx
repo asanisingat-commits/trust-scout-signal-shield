@@ -99,17 +99,14 @@ export function CheckPage() {
   const fileBtn = "min-h-16 rounded-xl border border-dashed px-4 flex items-center justify-center gap-3 cursor-pointer hover:border-primary focus-within:ring-2 focus-within:ring-ring/40";
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-14 pb-10">
-      <p className="text-center text-primary tracking-[0.25em] uppercase text-xs">{tr("Check before you pay", "تحقّق قبل أن تدفع")}</p>
-      <h1 className="mt-4 text-center text-3xl md:text-5xl font-bold leading-tight">
-        {tr("Got a message asking for money?", "وصلتك رسالة تطلب مالاً؟")}<br />{tr("Check everything in one go.", "افحص كل شيء مرة واحدة.")}
-      </h1>
+    <div className="mx-auto max-w-3xl px-4 pt-10 pb-10">
+      <h1 className="text-center text-3xl md:text-4xl font-bold">{tr("Check before you pay", "تحقّق قبل أن تدفع")}</h1>
       <p className="mt-4 text-center text-muted-foreground text-lg max-w-2xl mx-auto">
         {tr("Paste the message, link, phone number or IBAN. Add the voice note or image if there is one. You get one answer.",
           "الصق الرسالة أو الرابط أو الرقم أو الآيبان. أضف الرسالة الصوتية أو الصورة إن وُجدت. تحصل على جواب واحد.")}
       </p>
 
-      <section className="glass mt-10 p-5 md:p-6 grid gap-4" aria-label={tr("Check", "افحص")}>
+      <section className="glass mt-8 p-5 md:p-6 grid gap-4" aria-label={tr("Check", "افحص")}>
         <label htmlFor="ts-msg" className="font-semibold">{tr("What did you receive?", "ماذا استلمت؟")}</label>
         <textarea id="ts-msg" value={text} onChange={(e) => { setText(e.target.value); setNote(null); }} rows={5} maxLength={5000}
           className="w-full rounded-xl border bg-background px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
