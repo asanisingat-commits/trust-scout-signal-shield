@@ -33,3 +33,19 @@ describe("detection mapping", () => {
   it("middle scores are inconclusive", () => expect(interpretDetection([{ label: "spoof", score: 0.5 }])).toBe("inconclusive"));
   it("unknown labels are inconclusive", () => expect(interpretDetection([{ label: "LABEL_0", score: 0.99 }])).toBe("inconclusive"));
 });
+
+import { checkParts } from "./combine";
+describe("what we checked", () => {
+  it("lists one line per part and never marks an unchecked voice note as safe", () => {
+    const parts = checkParts({ text: "Send AED 4,000 now, urgent, don't tell dad", link: "", phone: "+44 7700 900123", iban: "AE07 0331 2345 6789 0123 456", mediaKind: "voice" });
+    expect(parts.map((p) => p.key)).toEqual(["media", "message", "phone", "iban"]);
+    expect(parts[0]!.status).toBe("not_checked");
+    expect(parts[3]!.status).not.toBe("no_signs");
+  });
+  it("does not double count a link that is inside the message", () => {
+    const text = "Your parcel is held. Pay now: http://aramex-uae-pay.xyz/track";
+    const a = analyzeCombined({ ...base, text, link: "http://aramex-uae-pay.xyz/track" });
+    const b = analyzeCombined({ ...base, text });
+    expect(a.score).toBe(b.score);
+  });
+});

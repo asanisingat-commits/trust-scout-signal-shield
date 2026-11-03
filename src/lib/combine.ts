@@ -126,7 +126,9 @@ export function analyzeCombined(input: CombinedInput, lang: Lang = "en"): Result
   if (text && FAMILY_RE.test(text)) signals.push({ label: T.familyLabel, detail: T.familyDetail, weight: 1.5 });
 
   // 2. Link, phone and bank details.
-  if (input.link.trim()) {
+  // Skip if the message rules already scored this link (avoid counting it twice).
+  const linkCounted = msg?.signals.some((s) => s.label === "Contains a suspicious link") ?? false;
+  if (input.link.trim() && !linkCounted) {
     const u = analyzeUrl(input.link);
     if (u.score >= 4) signals.push({ label: T.linkLabel, detail: T.linkDetail(input.link.trim(), u.score), weight: Math.min(4, u.score / 2) });
   }
@@ -169,4 +171,76 @@ export function interpretDetection(preds: { label: string; score: number }[]): M
   if (fakeScore >= 0.7) return "likely_fake";
   if (fakeScore <= 0.3) return "no_signs";
   return "inconclusive";
+}
+
+/** One line per thing the user sent, for the "What we checked" list. */
+export type PartStatus = "high" | "medium" | "no_signs" | "unsure" | "not_checked";
+export type Part = { key: "media" | "message" | "link" | "phone" | "iban"; title: string; status: PartStatus; detail: string };
+
+const P = {
+  en: {
+    media: { voice: "Voice note", image: "Image", video: "Video" },
+    message: "Message", link: "Link", phone: "Phone", iban: "IBAN",
+    fake: "The AI model found signs this may be AI-made.",
+    meta: (g: string) => `The file names an AI generator: “${g}”.`,
+    noSigns: "The AI model found no clear signs. That does not prove it is real.",
+    unsureMedia: "The AI model could not decide.",
+    notChecked: "Not checked by an AI model yet, so the answer relies on everything else you sent.",
+    msgNone: "No scam language found by our rules.",
+    linkNone: "No strong warning signs in this link.",
+    phoneOk: (c: string, t: string) => `${t} number, ${c}.`,
+    ibanBad: "Fails the IBAN checksum: mistyped or invented.",
+    ibanOk: "Valid format, but a valid IBAN can still belong to a scammer. Pay only after you have checked by phone.",
+  },
+  ar: {
+    media: { voice: "رسالة صوتية", image: "صورة", video: "فيديو" },
+    message: "الرسالة", link: "الرابط", phone: "الهاتف", iban: "الآيبان",
+    fake: "وجد نموذج الذكاء الاصطناعي علامات على أنه قد يكون مصنوعاً بالذكاء الاصطناعي.",
+    meta: (g: string) => `يذكر الملف أداة توليد بالذكاء الاصطناعي: «${g}».`,
+    noSigns: "لم يجد النموذج علامات واضحة، وهذا لا يثبت أنه حقيقي.",
+    unsureMedia: "لم يتمكن النموذج من الحسم.",
+    notChecked: "لم يُفحص بنموذج ذكاء اصطناعي بعد، لذا تعتمد النتيجة على باقي ما أرسلته.",
+    msgNone: "لم تجد قواعدنا لغة احتيال.",
+    linkNone: "لا توجد علامات تحذير قوية في هذا الرابط.",
+    phoneOk: (c: string, t: string) => `رقم ${t === "International" ? "دولي" : "محلي"}، ${c === "United Arab Emirates" ? "الإمارات" : c}.`,
+    ibanBad: "رقم الآيبان لا يجتاز التحقق: مكتوب خطأ أو مختلق.",
+    ibanOk: "الصيغة صحيحة، لكن الآيبان الصحيح قد يعود لمحتال. لا تدفع قبل أن تتحقق هاتفياً.",
+  },
+};
+
+const fromLevel = (l: Result["level"]): PartStatus => (l === "high" ? "high" : l === "medium" ? "medium" : "no_signs");
+const top = (r: Result, lang: Lang) => r.signals.slice().sort((a, b) => b.weight - a.weight).slice(0, 3).map((s) => tr(s, lang).label).join(" · ");
+
+export function checkParts(input: CombinedInput, lang: Lang = "en"): Part[] {
+  const T = P[lang];
+  const parts: Part[] = [];
+  if (input.mediaKind !== "none") {
+    const m = input.media;
+    const title = T.media[input.mediaKind];
+    if (m?.status === "likely_fake") parts.push({ key: "media", title, status: "high", detail: T.fake });
+    else if (m?.metadataAi) parts.push({ key: "media", title, status: "high", detail: T.meta(m.metadataAi) });
+    else if (m?.status === "no_signs") parts.push({ key: "media", title, status: "no_signs", detail: T.noSigns });
+    else if (m?.status === "inconclusive") parts.push({ key: "media", title, status: "unsure", detail: T.unsureMedia });
+    else parts.push({ key: "media", title, status: "not_checked", detail: T.notChecked });
+  }
+  if (input.text.trim()) {
+    const r = analyzeMessage(input.text);
+    parts.push({ key: "message", title: T.message, status: r.signals.length ? fromLevel(r.level) : "no_signs", detail: r.signals.length ? top(r, lang) : T.msgNone });
+  }
+  if (input.link.trim()) {
+    const r = analyzeUrl(input.link);
+    parts.push({ key: "link", title: `${T.link} · ${input.link.trim()}`, status: r.signals.length ? fromLevel(r.level) : "no_signs", detail: r.signals.length ? r.signals.slice(0, 2).map((s) => s.detail).join(" ") : T.linkNone });
+  }
+  if (input.phone.trim()) {
+    const p = analyzePhone(input.phone);
+    const r = p.result;
+    parts.push({ key: "phone", title: `${T.phone} · ${input.phone.trim()}`, status: r.signals.length ? fromLevel(r.level) === "no_signs" ? "medium" : fromLevel(r.level) : "unsure",
+      detail: r.signals.length ? r.signals.map((s) => tr(s, lang).detail).join(" ") : T.phoneOk(p.country, p.type) });
+  }
+  if (input.iban.trim()) {
+    const v = validateIban(input.iban);
+    const bad = v.formatOk && !v.checksumOk;
+    parts.push({ key: "iban", title: `${T.iban} · ${v.masked}`, status: bad ? "high" : "unsure", detail: bad ? T.ibanBad : T.ibanOk });
+  }
+  return parts;
 }

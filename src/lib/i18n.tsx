@@ -18,6 +18,7 @@ const dict = {
     report: "Report", copy: "Copy result", copied: "Copied", readAloud: "Read result aloud",
     reportTitle: "Where to report in the UAE", reportNote: "Check each official site for the latest reporting channel.",
     rep1: "Emergency: Police 999", rep2: "Dubai Police e-Crime platform: ecrime.ae", rep3: "Abu Dhabi Police Aman service: 800 2626",
+    navCheck: "Check", accuracy: "How accurate?", share: "Share result with family", shared: "Copied — paste it to your family",
     rep4: "Your bank’s official fraud line (number on the back of your card)", rep5: "Report the sender inside WhatsApp / the app you received it on",
   },
   ar: {
@@ -36,6 +37,7 @@ const dict = {
     report: "إبلاغ", copy: "نسخ النتيجة", copied: "تم النسخ", readAloud: "اقرأ النتيجة بصوت عالٍ",
     reportTitle: "أين تُبلّغ في الإمارات", reportNote: "تحقق من الموقع الرسمي لكل جهة لمعرفة أحدث قناة للإبلاغ.",
     rep1: "الطوارئ: الشرطة 999", rep2: "منصة الجرائم الإلكترونية لشرطة دبي: ecrime.ae", rep3: "خدمة أمان لشرطة أبوظبي: 800 2626",
+    navCheck: "افحص", accuracy: "ما مدى الدقة؟", share: "شارك النتيجة مع العائلة", shared: "تم النسخ — الصقه لعائلتك",
     rep4: "خط الاحتيال الرسمي لبنكك (الرقم على ظهر بطاقتك)", rep5: "أبلغ عن المرسل داخل واتساب أو التطبيق الذي وصلتك عليه الرسالة",
   },
 };
