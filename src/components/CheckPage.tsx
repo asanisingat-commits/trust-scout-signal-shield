@@ -4,6 +4,7 @@ import { extractParts, shortIban } from "@/lib/extract";
 import { detectMedia } from "@/lib/media.functions";
 import { findAiInImageMetadata } from "@/lib/imageMeta";
 import { CheckResult } from "@/components/CheckResult";
+import { ReportSection } from "@/components/ReportSection";
 import { useLang } from "@/lib/i18n";
 
 const MAX_FILE = 10 * 1024 * 1024;
@@ -148,13 +149,7 @@ export function CheckPage() {
         </div>
       </section>
 
-      <section className="mt-12 grid gap-4 md:grid-cols-3 text-sm">
-        {[[tr("Explained", "واضح"), tr("Every point in the score comes from a named rule you can read.", "كل نقطة في الدرجة تأتي من قاعدة مسمّاة يمكنك قراءتها.")],
-          [tr("Honest", "صادق"), tr("Nothing found is not the same as safe. We say “not sure” when we are not sure.", "عدم وجود علامات لا يعني الأمان. نقول «غير متأكد» عندما لا نكون متأكدين.")],
-          [tr("Arabic & English", "عربي وإنجليزي"), tr("One tap switches the whole page, including the reasons.", "ضغطة واحدة تغيّر الصفحة كلها، بما فيها الأسباب.")]].map(([h, p]) => (
-          <div key={h} className="glass p-5"><div className="font-semibold">{h}</div><p className="text-muted-foreground mt-1">{p}</p></div>
-        ))}
-      </section>
+      <ReportSection />
       <p className="mt-10 text-center text-sm text-muted-foreground">
         {tr("Works alongside SARAAB and TDRA Digital FraudHunter — built for residents, at the moment before they pay.", "يعمل جنباً إلى جنب مع «سراب» و«صائد الاحتيال الرقمي» من هيئة تنظيم الاتصالات — مصمَّم للمقيمين، في اللحظة التي تسبق الدفع.")}
       </p>
