@@ -12,8 +12,12 @@ export function WhatToDo({ r }: { r: Result }) {
   const [copied, setCopied] = useState(false);
   const levelWord = t(r.level);
 
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(resultToText(r, levelWord)); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard blocked */ }
+  const share = async () => {
+    const text = resultToText(r, levelWord);
+    try {
+      if (navigator.share) { await navigator.share({ title: "Trust Shield", text }); return; }
+    } catch { /* share cancelled or unsupported: fall back to copy */ }
+    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2500); } catch { /* clipboard blocked */ }
   };
   const speak = () => {
     try {
@@ -31,7 +35,7 @@ export function WhatToDo({ r }: { r: Result }) {
       </ol>
       <div className="mt-4 flex flex-wrap gap-2">
         <button onClick={() => setShowReport(!showReport)} className="rounded-lg bg-uae-red/90 text-white font-semibold px-4 py-2 text-sm hover:brightness-110">📣 {t("report")}</button>
-        <button onClick={copy} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">📋 {copied ? t("copied") : t("copy")}</button>
+        <button onClick={share} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">📤 {copied ? t("shared") : t("share")}</button>
         <button onClick={speak} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">🔊 {t("readAloud")}</button>
       </div>
       {showReport && (

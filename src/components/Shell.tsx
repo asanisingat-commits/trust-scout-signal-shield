@@ -12,8 +12,7 @@ export function Logo({ size = 36 }: { size?: number }) {
 }
 
 const NAV: { to: string; k: Key }[] = [
-  { to: "/", k: "home" }, { to: "/check", k: "check" }, { to: "/scan/url", k: "url" }, { to: "/scan/message", k: "message" }, { to: "/scan/phone", k: "phone" },
-  { to: "/scan/bank", k: "bank" }, { to: "/media", k: "media" }, { to: "/learn", k: "learn" }, { to: "/results", k: "results" },
+  { to: "/", k: "navCheck" }, { to: "/learn", k: "learn" }, { to: "/results", k: "accuracy" },
 ];
 
 export function Shell({ children }: { children: ReactNode }) {
