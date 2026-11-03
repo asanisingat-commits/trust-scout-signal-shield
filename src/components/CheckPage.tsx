@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { analyzeCombined, checkParts, type CombinedInput, type MediaFinding, type MediaKind } from "@/lib/combine";
 import { extractParts, shortIban } from "@/lib/extract";
 import { detectMedia } from "@/lib/media.functions";
 import { findAiInImageMetadata } from "@/lib/imageMeta";
 import { CheckResult } from "@/components/CheckResult";
 import { ReportSection } from "@/components/ReportSection";
+import { InstallApp } from "@/components/InstallApp";
 import { useLang } from "@/lib/i18n";
 
 const MAX_FILE = 10 * 1024 * 1024;
@@ -82,6 +83,18 @@ export function CheckPage() {
     void run(ex.text, ex.kind, null);
   };
 
+  // Opened from the phone's share menu (installed app): check the shared message straight away.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const shared = [q.get("title"), q.get("text"), q.get("url")].filter((v): v is string => !!v && v.trim().length > 0);
+    if (shared.length === 0) return;
+    const t = [...new Set(shared)].join("\n");
+    window.history.replaceState(null, "", window.location.pathname);
+    setText(t);
+    void run(t, "none", null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (out) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-10">
@@ -149,6 +162,7 @@ export function CheckPage() {
         </div>
       </section>
 
+      <InstallApp />
       <ReportSection />
       <p className="mt-10 text-center text-sm text-muted-foreground">
         {tr("Works alongside SARAAB and TDRA Digital FraudHunter — built for residents, at the moment before they pay.", "يعمل جنباً إلى جنب مع «سراب» و«صائد الاحتيال الرقمي» من هيئة تنظيم الاتصالات — مصمَّم للمقيمين، في اللحظة التي تسبق الدفع.")}
