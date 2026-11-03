@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Space Grotesk", "IBM Plex Sans Arabic", sans-serif;
-  --font-sans: "IBM Plex Sans", "IBM Plex Sans Arabic", sans-serif;
+  --font-display: "Newsreader", "IBM Plex Sans Arabic", Georgia, serif;
+  --font-sans: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -35,50 +35,80 @@
 }
 
 :root {
+  /* Theme B · Ivory & Emerald (light, default) */
   --radius: 0.875rem;
-  --background: oklch(0.14 0.03 255);
-  --foreground: oklch(0.96 0.01 250);
-  --card: oklch(0.19 0.035 255);
-  --card-foreground: oklch(0.96 0.01 250);
-  --popover: oklch(0.19 0.035 255);
-  --popover-foreground: oklch(0.96 0.01 250);
-  --primary: oklch(0.78 0.17 160);
-  --primary-foreground: oklch(0.14 0.03 255);
-  --secondary: oklch(0.24 0.04 255);
-  --secondary-foreground: oklch(0.96 0.01 250);
-  --muted: oklch(0.22 0.035 255);
-  --muted-foreground: oklch(0.7 0.03 250);
-  --accent: oklch(0.26 0.05 200);
-  --accent-foreground: oklch(0.96 0.01 250);
-  --destructive: oklch(0.64 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --warning: oklch(0.8 0.16 80);
-  --uae-red: oklch(0.58 0.22 27);
-  --border: oklch(0.3 0.04 255);
-  --input: oklch(0.3 0.04 255);
-  --ring: oklch(0.78 0.17 160);
-  --glow: 0 0 40px -8px color-mix(in oklab, var(--primary) 60%, transparent);
-  --grad-hero: radial-gradient(ellipse at 50% 0%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 60%),
-    linear-gradient(180deg, oklch(0.12 0.03 255), oklch(0.09 0.02 255));
+  --background: #F6F4EF;
+  --foreground: #1B1F1D;
+  --card: #FFFFFF;
+  --card-foreground: #1B1F1D;
+  --popover: #FFFFFF;
+  --popover-foreground: #1B1F1D;
+  --primary: #0E5A43;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E7F0EB;
+  --secondary-foreground: #0E5A43;
+  --muted: #EFECE5;
+  --muted-foreground: #5E625F;
+  --accent: #E7F0EB;
+  --accent-foreground: #0E5A43;
+  --destructive: #B42318;
+  --destructive-foreground: #FFFFFF;
+  --warning: #9A5B00;
+  --uae-red: #C8102E;
+  --border: #E4E0D6;
+  --input: #D8D3C7;
+  --ring: #0E5A43;
+  --score-l: 0.52;
+  --glow: 0 1px 2px rgb(27 31 29 / 0.06), 0 6px 18px rgb(14 90 67 / 0.18);
+  --card-shadow: 0 1px 2px rgb(27 31 29 / 0.04), 0 8px 24px rgb(27 31 29 / 0.06);
+}
+
+.dark {
+  /* Theme B · night version */
+  --background: #0F1412;
+  --foreground: #F2F0EA;
+  --card: #161D1A;
+  --card-foreground: #F2F0EA;
+  --popover: #161D1A;
+  --popover-foreground: #F2F0EA;
+  --primary: #4CC495;
+  --primary-foreground: #0B1110;
+  --secondary: #1C2622;
+  --secondary-foreground: #F2F0EA;
+  --muted: #1C2622;
+  --muted-foreground: #A3ABA6;
+  --accent: #1C2622;
+  --accent-foreground: #F2F0EA;
+  --destructive: #F07A62;
+  --destructive-foreground: #0B1110;
+  --warning: #E9B44C;
+  --uae-red: #D9343F;
+  --border: #26302C;
+  --input: #2E3934;
+  --ring: #4CC495;
+  --score-l: 0.74;
+  --glow: none;
+  --card-shadow: none;
 }
 
 @layer base {
   * { border-color: var(--color-border); }
   body {
-    background: var(--grad-hero);
-    background-attachment: fixed;
+    background: var(--background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     min-height: 100vh;
   }
-  h1, h2, h3 { font-family: var(--font-display); }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
+  html { color-scheme: light; }
+  html.dark { color-scheme: dark; }
 }
 
 @utility glass {
-  background: color-mix(in oklab, var(--card) 80%, transparent);
-  backdrop-filter: blur(12px);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
+  box-shadow: var(--card-shadow);
 }
 @utility glow { box-shadow: var(--glow); }
 @utility grid-bg {
