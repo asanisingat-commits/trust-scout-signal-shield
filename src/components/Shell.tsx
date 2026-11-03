@@ -1,15 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { useLang, type Key } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 
-export function Logo({ size = 36 }: { size?: number }) {
+export function Logo({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden className="drop-shadow-[0_0_10px_var(--primary)]">
-      <path d="M24 3 6 10v12c0 11 7.7 20.6 18 23 10.3-2.4 18-12 18-23V10L24 3Z" stroke="var(--primary)" strokeWidth="2.5" fill="color-mix(in oklab, var(--primary) 12%, transparent)" />
-      <path d="m16 24 6 6 11-12" stroke="var(--primary)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden>
+      <path d="M24 4 7 10.5v11.5c0 10.5 7.3 19.6 17 22 9.7-2.4 17-11.5 17-22V10.5L24 4Z" fill="var(--primary)" />
+      <path d="m17 24 5 5 9-10" stroke="var(--primary-foreground)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
+
+const SUN = "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z";
+const MOON = "M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z";
 
 const NAV: { to: string; k: Key }[] = [
   { to: "/", k: "navCheck" }, { to: "/learn", k: "learn" }, { to: "/results", k: "accuracy" },
@@ -17,30 +21,34 @@ const NAV: { to: string; k: Key }[] = [
 
 export function Shell({ children }: { children: ReactNode }) {
   const { t, lang, setLang } = useLang();
+  const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
+  const pill = "h-11 rounded-full border bg-card px-4 text-sm hover:border-primary transition-colors";
+  const themeLabel = theme === "dark" ? (lang === "ar" ? "الوضع الفاتح" : "Light mode") : (lang === "ar" ? "الوضع الداكن" : "Dark mode");
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="uae-stripe" />
-      <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-        <div className="mx-auto max-w-7xl flex items-center gap-4 px-4 h-16">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
+      <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur">
+        <div className="mx-auto max-w-6xl flex items-center gap-3 px-4 h-[72px]">
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <Logo />
-            <div className="leading-tight">
-              <div className="font-display font-bold tracking-wider">TRUST SHIELD</div>
-              <div className="text-[10px] text-primary tracking-widest uppercase">{t("tagline")}</div>
-            </div>
+            <span className="font-display text-[22px] font-semibold">{lang === "ar" ? "درع الثقة" : "Trust Shield"}</span>
           </Link>
-          <nav className="hidden lg:flex gap-1 mx-auto">
+          <nav className="hidden lg:flex gap-1 ms-auto" aria-label="Main">
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} activeOptions={{ exact: true }} className="px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground transition-colors" activeProps={{ className: "!text-primary bg-primary/10" }}>{t(n.k)}</Link>
+              <Link key={n.to} to={n.to} activeOptions={{ exact: true }} className="px-4 py-2.5 rounded-full text-[15px] text-muted-foreground hover:text-foreground transition-colors" activeProps={{ className: "!text-primary bg-secondary font-medium" }}>{t(n.k)}</Link>
             ))}
           </nav>
-          <button onClick={() => setLang(lang === "en" ? "ar" : "en")} className="ms-auto lg:ms-0 rounded-md border px-3 py-1.5 text-sm hover:border-primary">{lang === "en" ? "العربية" : "English"}</button>
-          <button onClick={() => setOpen(!open)} className="lg:hidden rounded-md border px-3 py-1.5 text-sm" aria-label="Menu">☰</button>
+          <div className="ms-auto lg:ms-4 flex items-center gap-2">
+            <button onClick={toggle} className={`${pill} w-11 px-0 grid place-items-center`} aria-label={themeLabel} title={themeLabel}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={theme === "dark" ? SUN : MOON} /></svg>
+            </button>
+            <button onClick={() => setLang(lang === "en" ? "ar" : "en")} className={pill}>{lang === "en" ? "العربية" : "English"}</button>
+            <button onClick={() => setOpen(!open)} className={`${pill} lg:hidden`} aria-label="Menu" aria-expanded={open}>☰</button>
+          </div>
         </div>
         {open && (
-          <nav className="lg:hidden border-t px-4 py-2 grid gap-1">
-            {NAV.map((n) => <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="px-3 py-2 rounded-md text-sm">{t(n.k)}</Link>)}
+          <nav className="lg:hidden border-t px-4 py-2 grid gap-1" aria-label="Main">
+            {NAV.map((n) => <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="px-3 py-3 rounded-lg text-sm" activeOptions={{ exact: true }} activeProps={{ className: "text-primary bg-secondary" }}>{t(n.k)}</Link>)}
           </nav>
         )}
       </header>
@@ -48,7 +56,6 @@ export function Shell({ children }: { children: ReactNode }) {
       <footer className="border-t mt-16 py-8 text-center text-sm text-muted-foreground">
         <div className="flex justify-center items-center gap-2 mb-2"><Logo size={20} /> Trust Shield</div>
         <div className="text-xs">Built for UAE Hackathon 2026 · Challenge 40: Building Trust in Digital Content</div>
-
       </footer>
     </div>
   );

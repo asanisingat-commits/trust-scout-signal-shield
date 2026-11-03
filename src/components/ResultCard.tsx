@@ -5,7 +5,7 @@ import { WhatToDo } from "@/components/WhatToDo";
 export function scoreColor(score: number) {
   // 0 green -> 10 red, continuous hue
   const hue = 150 - score * 12.5;
-  return `oklch(0.72 0.18 ${hue})`;
+  return `oklch(var(--score-l) 0.17 ${hue})`;
 }
 
 export function ResultCard({ r, extra }: { r: Result; extra?: React.ReactNode }) {

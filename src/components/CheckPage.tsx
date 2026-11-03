@@ -97,11 +97,11 @@ export function CheckPage() {
     ...found.phones.map((p) => `${tr("Phone", "هاتف")} · ${p}`),
   ];
   const canRun = !busy && (text.trim().length > 0 || !!file);
-  const fileBtn = "min-h-16 rounded-xl border border-dashed px-4 flex items-center justify-center gap-3 cursor-pointer hover:border-primary focus-within:ring-2 focus-within:ring-ring/40";
+  const fileBtn = "min-h-14 rounded-xl border border-input bg-card px-4 flex items-center justify-center gap-3 cursor-pointer hover:border-primary focus-within:ring-2 focus-within:ring-ring/40";
 
   return (
     <div className="mx-auto max-w-3xl px-4 pt-10 pb-10">
-      <h1 className="text-center text-3xl md:text-4xl font-bold">{tr("Check before you pay", "تحقّق قبل أن تدفع")}</h1>
+      <h1 className="text-center text-4xl md:text-5xl font-medium">{tr("Check before you pay", "تحقّق قبل أن تدفع")}</h1>
       <p className="mt-4 text-center text-muted-foreground text-lg max-w-2xl mx-auto">
         {tr("Paste the message, link, phone number or IBAN. Add the voice note or image if there is one. You get one answer.",
           "الصق الرسالة أو الرابط أو الرقم أو الآيبان. أضف الرسالة الصوتية أو الصورة إن وُجدت. تحصل على جواب واحد.")}
@@ -110,7 +110,7 @@ export function CheckPage() {
       <section className="glass mt-8 p-5 md:p-6 grid gap-4" aria-label={tr("Check", "افحص")}>
         <label htmlFor="ts-msg" className="font-semibold">{tr("What did you receive?", "ماذا استلمت؟")}</label>
         <textarea id="ts-msg" value={text} onChange={(e) => { setText(e.target.value); setNote(null); }} rows={5} maxLength={5000}
-          className="w-full rounded-xl border bg-background px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
+          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
           placeholder={tr("Paste the whole message here — links, numbers and IBANs inside it are found automatically", "الصق الرسالة كاملة هنا — نجد الروابط والأرقام والآيبان بداخلها تلقائياً")} />
 
         {chips.length > 0 && (
@@ -134,7 +134,7 @@ export function CheckPage() {
         {tooBig && <p className="text-sm text-warning">{tr("That file is over 10 MB. Try a shorter clip or a screenshot.", "الملف أكبر من 10 ميغابايت. جرّب مقطعاً أقصر أو لقطة شاشة.")}</p>}
 
         <button onClick={() => void run()} disabled={!canRun}
-          className="h-14 rounded-xl bg-primary text-primary-foreground font-bold text-lg glow hover:brightness-110 transition disabled:opacity-50">
+          className="h-14 rounded-xl bg-primary text-primary-foreground font-semibold text-lg hover:brightness-110 transition disabled:opacity-50">
           {busy ? tr("Checking…", "جارٍ الفحص…") : tr("Check it", "افحص")}
         </button>
 

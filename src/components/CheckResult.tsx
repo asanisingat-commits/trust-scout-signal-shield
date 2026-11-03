@@ -6,7 +6,7 @@ import { WhatToDo } from "@/components/WhatToDo";
 import { scoreColor } from "@/components/ResultCard";
 
 const CHIP: Record<PartStatus, string> = {
-  high: "bg-destructive/20 text-[oklch(0.75_0.17_27)]",
+  high: "bg-destructive/15 text-destructive",
   medium: "bg-warning/15 text-warning",
   unsure: "bg-warning/15 text-warning",
   no_signs: "bg-primary/15 text-primary",

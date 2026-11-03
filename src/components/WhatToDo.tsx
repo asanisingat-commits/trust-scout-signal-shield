@@ -28,15 +28,15 @@ export function WhatToDo({ r }: { r: Result }) {
   };
 
   return (
-    <div className="mt-6 rounded-xl border-2 border-primary/60 bg-primary/5 p-5">
-      <h3 className="font-semibold text-lg">✅ {t("todoTitle")}</h3>
+    <div className="mt-6 rounded-xl border border-primary/40 bg-secondary p-5">
+      <h3 className="font-semibold text-lg">{t("todoTitle")}</h3>
       <ol className="mt-3 grid gap-2 text-sm list-decimal ps-5">
         <li>{t("todo1")}</li><li>{t("todo2")}</li><li>{t("todo3")}</li><li>{t("todo4")}</li>
       </ol>
       <div className="mt-4 flex flex-wrap gap-2">
-        <button onClick={() => setShowReport(!showReport)} className="rounded-lg bg-uae-red/90 text-white font-semibold px-4 py-2 text-sm hover:brightness-110">📣 {t("report")}</button>
-        <button onClick={share} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">📤 {copied ? t("shared") : t("share")}</button>
-        <button onClick={speak} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">🔊 {t("readAloud")}</button>
+        <button onClick={() => setShowReport(!showReport)} className="rounded-lg bg-uae-red text-white font-semibold px-4 py-2 text-sm hover:brightness-110">{t("report")}</button>
+        <button onClick={share} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">{copied ? t("shared") : t("share")}</button>
+        <button onClick={speak} className="rounded-lg border px-4 py-2 text-sm hover:border-primary">{t("readAloud")}</button>
       </div>
       {showReport && (
         <div className="mt-4 rounded-lg bg-muted/60 p-4 text-sm">
