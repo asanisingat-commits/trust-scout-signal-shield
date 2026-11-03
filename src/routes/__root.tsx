@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LangProvider } from "@/lib/i18n";
+import { ThemeProvider } from "@/lib/theme";
 import { Shell } from "@/components/Shell";
 
 function NotFoundComponent() {
@@ -40,7 +41,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -51,8 +52,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <head><HeadContent /></head>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Apply the saved light/dark choice before first paint (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: "try{if(localStorage.getItem('ts-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}" }} />
+        <HeadContent />
+      </head>
       <body>{children}<Scripts /></body>
     </html>
   );
@@ -62,7 +67,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <LangProvider><Shell><Outlet /></Shell></LangProvider>
+      <ThemeProvider><LangProvider><Shell><Outlet /></Shell></LangProvider></ThemeProvider>
     </QueryClientProvider>
   );
 }
